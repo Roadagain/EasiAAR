@@ -27,6 +27,7 @@ for line in sys.stdin:
         elif word != unquoted:
             zipped = translate_words(unquoted.split(), dictionary, '')
             translated.append(zipped)
+            dictionary[word] = zipped
         else:
             translated.append(word)
 
