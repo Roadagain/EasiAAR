@@ -1,8 +1,8 @@
 import sys
 
-def translate_words(sentence, dictionary, after_sep = ' '):
+def translate_words(words, dictionary, after_sep = ' '):
     translated = []
-    for word in sentence.split():
+    for word in words:
         if word in dictionary:
             translated.append(dictionary[word])
         else:
@@ -16,4 +16,4 @@ for line in open(sys.argv[1]):
     dictionary[before] = after
 
 for line in sys.stdin:
-    print(translate_words(line, dictionary))
+    print(translate_words(line.split(), dictionary))
