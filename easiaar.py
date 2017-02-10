@@ -16,16 +16,23 @@ for line in open(sys.argv[1]):
     before, after = line.split()
     dictionary[before] = after
 
-SPLIT_PATTERN = re.compile(r'".*?"|\S+')
+QUOTED = re.compile(r'".*?"')
+QUOTE_AS_IS = re.compile(r'[!]' + QUOTED.pattern)
+OTHERWISE = re.compile(r'\S+')
+WORDS = '|'.join([QUOTE_AS_IS.pattern, QUOTED.pattern, OTHERWISE.pattern])
+SPLIT_PATTERN = re.compile(WORDS)
 
 for line in sys.stdin:
     translated = []
     for word in SPLIT_PATTERN.findall(line):
-        unquoted = word.strip('"')
+        is_quoted = QUOTED.match(word) is not None
+        is_banged = QUOTE_AS_IS.match(word) is not None
         if word in dictionary:
             translated.append(dictionary[word])
-        elif word != unquoted:
-            zipped = translate_words(unquoted.split(), dictionary, '')
+        elif is_banged:
+            translated.append(word[1:])
+        elif is_quoted:
+            zipped = translate_words(word.strip('"').split(), dictionary, '')
             translated.append(zipped)
             dictionary[word] = zipped
         else:
