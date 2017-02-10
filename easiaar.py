@@ -1,4 +1,13 @@
 import sys
+def replace(sentence, dictionary, after_sep = ' '):
+    replaced = []
+    for word in sentence.split():
+        if word in dictionary:
+            replaced.append(dictionary[word])
+        else:
+            replaced.append(word)
+
+    return after_sep.join(replaced)
 
 dictionary = {}
 for line in open(sys.argv[1]):
@@ -6,12 +15,4 @@ for line in open(sys.argv[1]):
     dictionary[before] = after
 
 for line in sys.stdin:
-    words = line.split()
-    translated = []
-    for word in words:
-        if word in dictionary:
-            translated.append(dictionary[word])
-        else:
-            translated.append(word)
-
-    print(' '.join(translated))
+    print(replace(line, dictionary))
