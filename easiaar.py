@@ -16,13 +16,16 @@ for line in open(sys.argv[1]):
     before, after = line.split()
     dictionary[before] = after
 
-SPLIT_PATTERN = re.compile(r'[!]".*?"|".*?"|\S+')
+QUOTED = r'".*?"'
+QUOTE_AS_IS = r'[!]' + QUOTED
+OTHERWISE = r'\S+'
+SPLIT_PATTERN = re.compile('|'.join([QUOTE_AS_IS, QUOTED, OTHERWISE]))
 
 for line in sys.stdin:
     translated = []
     for word in SPLIT_PATTERN.findall(line):
         unquoted = word.strip('"')
-        is_banged = (re.match('^[!]".*?"', word) is not None)
+        is_banged = (QUOTE_AS_IS.match(word) is not None)
         if word in dictionary:
             translated.append(dictionary[word])
         elif is_banged:
