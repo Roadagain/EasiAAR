@@ -16,14 +16,17 @@ for line in open(sys.argv[1]):
     before, after = line.split()
     dictionary[before] = after
 
-SPLIT_PATTERN = re.compile(r'".*?"|\S+')
+SPLIT_PATTERN = re.compile(r'[!]".*?"|".*?"|\S+')
 
 for line in sys.stdin:
     translated = []
     for word in SPLIT_PATTERN.findall(line):
         unquoted = word.strip('"')
+        is_banged = (re.match('^[!]".*?"', word) is not None)
         if word in dictionary:
             translated.append(dictionary[word])
+        elif is_banged:
+            translated.append(word[1:])
         elif word != unquoted:
             zipped = translate_words(unquoted.split(), dictionary, '')
             translated.append(zipped)
