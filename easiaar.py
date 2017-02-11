@@ -21,7 +21,7 @@ QUOTE_AS_IS = re.compile(r'[!]' + QUOTED.pattern)
 OTHERWISE = re.compile(r'\S+')
 WORDS = '|'.join([QUOTE_AS_IS.pattern, QUOTED.pattern, OTHERWISE.pattern])
 SPLIT_PATTERN = re.compile(WORDS)
-SPACE = re.compile(r'^\s*')
+SPACE = re.compile(r'^[ \t]*')
 
 for line in sys.stdin:
     indent = SPACE.match(line).group()
