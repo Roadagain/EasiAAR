@@ -21,8 +21,10 @@ QUOTE_AS_IS = re.compile(r'[!]' + QUOTED.pattern)
 OTHERWISE = re.compile(r'\S+')
 WORDS = '|'.join([QUOTE_AS_IS.pattern, QUOTED.pattern, OTHERWISE.pattern])
 SPLIT_PATTERN = re.compile(WORDS)
+SPACE = re.compile(r'^\s*')
 
 for line in sys.stdin:
+    indent = SPACE.match(line).group()
     translated = []
     for word in SPLIT_PATTERN.findall(line):
         is_quoted = QUOTED.match(word) is not None
@@ -38,4 +40,4 @@ for line in sys.stdin:
         else:
             translated.append(word)
 
-    print(' '.join(translated))
+    print(indent + ' '.join(translated))
